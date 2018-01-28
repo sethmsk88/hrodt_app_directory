@@ -25,7 +25,7 @@
 			placeholder="Password"
 			style="line-height:.5em; margin-bottom:0;">
 
-		<a href="?page=reset_pw" style="line-height:2em;">Forgot your password?</a>
+		<a href="class_specs/?page=forgotPw" style="line-height:2em;">Forgot your password?</a>
 
 		<input
 			type="submit"
