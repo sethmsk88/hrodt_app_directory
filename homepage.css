@@ -1,0 +1,22 @@
+.btn-style1{
+	background-image: linear-gradient(to bottom, #F27D00 0px, #C54C20 100%);
+	background-repeat: repeat-x;
+	border-color: #C0471B;
+	color: #FFF;
+}
+
+.btn-style1:active,
+.btn-style1:focus,
+.btn-style1:hover{
+	color: #FFF;
+	border-color: #C54C20;
+}
+
+.btn-style1:focus,
+.btn-style1:hover{
+	text-decoration: none;
+}
+
+.bottom_buffer{
+	margin-top:20px;
+}
