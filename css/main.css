@@ -1,0 +1,47 @@
+.btn-style1{
+	background-image: linear-gradient(to bottom, #F27D00 0px, #C54C20 100%);
+	background-repeat: repeat-x;
+	border-color: #C0471B;
+	color: #FFF;
+}
+
+.btn-style1:active,
+.btn-style1:focus,
+.btn-style1:hover{
+	color: #FFF;
+	border-color: #C54C20;
+}
+
+.btn-style1:focus,
+.btn-style1:hover{
+	text-decoration: none;
+}
+
+.bottom_buffer{
+	margin-top:20px;
+}
+
+/** CSS to make dropdown look correct in nav-bar **/
+.navbar-nav > li > .dropdown > a {
+	padding: 15px;
+	color: #fff;
+	display: block;
+}
+.nav .open > a, .nav .open > a:focus,
+.nav .open > a:hover {
+    background-color: #b1441d;
+    text-decoration: none;
+}
+
+.loginForm{
+	border-radius:4px;
+	padding:10px 10px 8px 10px;
+	background-color:#EFEFEF;
+	position:absolute;
+	display: block;
+	box-shadow: 0px 0px 3px #888888;
+	position:absolute;
+	display:block;
+	z-index:1001;
+	width: 225px;
+}

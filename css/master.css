@@ -1,0 +1,45 @@
+.btn-style1{
+	background-image: linear-gradient(to bottom, #F27D00 0px, #C54C20 100%);
+	background-repeat: repeat-x;
+	border-color: #C0471B;
+	color: #FFF;
+}
+
+.btn-style1:active,
+.btn-style1.active,
+.btn-style1:focus,
+.btn-style1.focus,
+.btn-style1:hover{
+	color: #FFF;
+	border-color: #C54C20;
+}
+
+.btn-style1:focus,
+.btn-style1.focus,
+.btn-style1:hover{
+	text-decoration: none;
+}
+
+.fixed-header-container{
+	position: fixed;
+	z-index: 1050;
+	width: 100%;
+	background-color: #E6DED4;
+}
+
+.fixed-header-spacer{
+	padding-bottom: 150px;
+}
+
+.footer{
+	margin-top: 80px;
+	padding-bottom: 15px;
+	padding-top: 10px;
+	border-top: 1px solid #ddd;
+	color: #999;
+}
+
+#famuLogo{
+  padding-bottom:2px;
+  padding-left:95px;
+}

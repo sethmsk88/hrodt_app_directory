@@ -1,9 +1,6 @@
 class_specs/
-css/
 pay_level_manager/
 sacs/
-shared/
 tc_manager/
-templates/
-user_manager/
+user_management/
 widgets/

@@ -1,0 +1,15 @@
+$navbar-color1: #C54C20;
+$navbar-color2: #B1441D;
+$navbar-color3: #444444;
+
+.navbar-custom {
+	background-color: $navbar-color1;
+	border-color: $navbar-color2;
+}
+
+.navbar-custom .navbar-nav > .active > a,
+.navbar-custom .navbar-nav > .active > a:focus,
+.navbar-custom .navbar-nav > .active > a:hover {
+    color: $navbar-color3;
+    background-color: $navbar-color2;
+}
