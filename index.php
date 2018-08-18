@@ -2,9 +2,10 @@
     define("APP_HOMEPAGE", "homepage");
     define("APP_NAME", "HR and ODT Web Applications");
 
-    require_once $_SERVER['DOCUMENT_ROOT'] . '/bootstrap/apps/shared/dbInfo.php';
-    require_once "./functions.php";
+    require_once $_SERVER['DOCUMENT_ROOT'] . '/bootstrap/apps/class_specs/vendor/autoload.php';
     require_once $_SERVER['DOCUMENT_ROOT'] . '/bootstrap/apps/shared/db_connect.php';
+    require_once $_SERVER['DOCUMENT_ROOT'] . '/bootstrap/apps/shared/login_functions.php';;
+    require_once "./functions.php";    
 ?>
 
 <!DOCTYPE html>
@@ -15,7 +16,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?php echo $pageTitle="HR ODT Web Applications"; ?></title>
 
-    <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
     <link href="./css/navbar-custom1.css" rel="stylesheet">
     <link href="./css/master.css" rel="stylesheet">
@@ -25,7 +26,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.js"></script>
     <script src="/bootstrap/js/bootstrap.min.js"></script>
-    <script src="./js/login.js"></script>
+    <script src="./shared/login.js"></script>
     <script src="/bootstrap/js/sha512.js"></script>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -47,7 +48,8 @@
         sec_session_start();
 
         // Check to see if User is logged in
-        $loggedIn = login_check($conn);
+        $dummyAppId = 0;
+        login_check($dummyAppId, $conn);
     ?>
 
     <!-- Nav Bar -->
@@ -77,12 +79,12 @@
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">
-                    <?php if ($loggedIn) { ?>
+                    <?php if ($GLOBALS['LOGGED_IN']) { ?>
                     <li class="dropdown" style="cursor:pointer;">
                         <a href="#" data-toggle="dropdown" class="dropdown-toggle"><span class="glyphicon glyphicon-user" style="margin-right:8px;"></span><?= $_SESSION['firstName'] ?> <span class="glyphicon glyphicon-triangle-bottom" style="margin-left:4px;"></span></a>
                         <ul class="dropdown-menu">
                             <li>
-                                <a id="logout-link" href="./act_logout.php"> Log out</a>
+                                <a id="logout-link" href="./shared/act_logout.php"> Log out</a>
                             </li>
                         </ul>
                     </li>

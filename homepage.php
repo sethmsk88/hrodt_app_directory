@@ -1,6 +1,6 @@
 <div class="container">
 <?php
-	if (!$loggedIn) {
+	if (!$GLOBALS['LOGGED_IN']) {
 		echo '<div class="text-danger h4">Please log in to access the applications.</div>';
 	} else {
 

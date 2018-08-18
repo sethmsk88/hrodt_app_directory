@@ -30,14 +30,12 @@ function sec_session_start() {
 	session_regenerate_id(true);
 }
 
-
-
-function getUserId($email) {
+function getUserId($email, $conn) {
 	$stmt = $conn->prepare("
 		select UserId
 		from user_management.users
 		where email = ?
-	";
+	");
 	$stmt->bind_param("s", $email);
 	$stmt->execute();
 	$result = $stmt->get_result();
@@ -50,20 +48,19 @@ function getUserId($email) {
 }
 
 function login($email, $hashedPassword, $conn) {
-
 	sec_session_start();
 
 	/* Get user record with matching email */
 	$stmt = $conn->prepare("
 		SELECT UserId, Email, FirstName, LastName, Password, TempPassword, TempPasswordCreated
 		FROM user_management.users
-		WHERE Email = ?";
+		WHERE Email = ?");
 	$stmt->bind_param("s", $email);
 	$stmt->execute();
 	$result = $stmt->get_result();
 
 	if ($result->num_rows === 0)
-		return -1; // no user has that email address
+		return false; // no user has that email address
 	
 	$user = $result->fetch_assoc();
 
@@ -74,13 +71,75 @@ function login($email, $hashedPassword, $conn) {
 	}
 
 	$_SESSION['user_id'] = $user['UserId'];
-	$_SESSION['login_string'] = hash('sha512', $password . $_SERVER['HTTP_USER_AGENT'];);
+	$_SESSION['login_string'] = hash('sha512', $user['Password'] . $_SERVER['HTTP_USER_AGENT']);
 
 	// XSS protection as we might print these values
-    $firstName = preg_replace("/[^a-zA-Z0-9_\-]+/", "", $firstName);
-    $lastName = preg_replace("/[^a-zA-Z0-9_\-]+/", "", $lastName);
-    $_SESSION['firstName'] = $firstName;
-	$_SESSION['lastName'] = $lastName;
+    $_SESSION['firstName'] = preg_replace("/[^a-zA-Z0-9_\-]+/", "", $user['FirstName']);
+    $_SESSION['lastName'] = preg_replace("/[^a-zA-Z0-9_\-]+/", "", $user['LastName']);
+
+	return true;
 }
 
+// Get the login status and access level of the current user for this app
+function login_check($appId, $conn) {
+	$accessLevel = null; // Default access level is Guest
+	$GLOBALS['ACCESS_LEVEL'] = $accessLevel;
+	$GLOBALS['LOGGED_IN'] = false;
+	$GLOBALS['LOGIN_CHECK_ERRORS'] = [];
+
+	try {
+		// If the user isn't logged in, return the default array with guest level access
+		if (!isset($_SESSION['user_id'])) {
+			return;
+		}
+
+		// Check to see if the user is logged in
+		$stmt = $conn->prepare("
+			select Password
+			from user_management.users
+			where UserId = ?
+		");
+		$stmt->bind_param("i", $_SESSION['user_id']);
+		$stmt->execute();
+		$result = $stmt->get_result();
+		if ($result->num_rows === 0) {
+			throw new Exception('Login Check Failed - No user exists with this User ID');
+		}
+		$user = $result->fetch_assoc();
+
+		// Make sure required session variable exists
+		if (!isset($_SESSION['login_string'])) {
+			throw new Exception("Login Check Failed - Missing required session variable"); // login failed
+		}
+
+		$login_string = hash('sha512', $user['Password'] . $_SERVER['HTTP_USER_AGENT']);
+		if ($login_string != $_SESSION['login_string']) {
+			throw new Exception("Invalid login string");
+		} else {
+			$GLOBALS['LOGGED_IN'] = true;
+		}
+
+		// Get user access info
+		$stmt = $conn->prepare("
+			select u.UserId, a.AppId, au.AccessLevel, concat(u.FirstName, ' ', u.LastName) FullName
+			from user_management.users u
+			left join user_management.apps_users au on au.UserId = u.UserId
+			left join user_management.apps a on a.AppId = au.AppId
+			where u.UserId = ? and a.AppId = ?"
+		);
+		$stmt->bind_param("ii", $_SESSION['user_id'], $appId);
+		$stmt->execute();
+		$result = $stmt->get_result();
+
+		if ($result->num_rows === 0) {
+			$GLOBALS['ACCESS_LEVEL'] = null; // User has guest-level access to this app
+		} else {
+			$userAccess = $result->fetch_assoc();
+			$GLOBALS['ACCESS_LEVEL'] = $userAccess['AccessLevel'];
+		}
+
+	} catch (Exception $e) {
+		array_push($GLOBALS['LOGIN_CHECK_ERRORS'], $e->getMessage());
+	}
+}
 ?>
