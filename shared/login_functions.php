@@ -94,13 +94,18 @@ function login_check($appId, $conn) {
 		}
 
 		// Check to see if the user is logged in
-		$stmt = $conn->prepare("
+		if (!$stmt = $conn->prepare("
 			select Password
 			from user_management.users
 			where UserId = ?
-		");
-		$stmt->bind_param("i", $_SESSION['user_id']);
-		$stmt->execute();
+		")) {
+			throw new Exception($conn->error);
+		} else if (!$stmt->bind_param("i", $_SESSION['user_id'])) {
+			throw new Exception($conn->error);
+		} else if (!$stmt->execute()) {
+			throw new Exception($conn->error);
+		}
+		
 		$result = $stmt->get_result();
 		if ($result->num_rows === 0) {
 			throw new Exception('Login Check Failed - No user exists with this User ID');
@@ -139,7 +144,7 @@ function login_check($appId, $conn) {
 		}
 
 	} catch (Exception $e) {
-		array_push($GLOBALS['LOGIN_CHECK_ERRORS'], $e->getMessage());
+		echo $e->getMessage();
 	}
 }
 ?>
