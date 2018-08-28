@@ -144,7 +144,7 @@ function login_check($appId, $conn) {
 		}
 
 	} catch (Exception $e) {
-		echo $e->getMessage();
+		array_push($GLOBALS['LOGIN_CHECK_ERRORS'], $e->getMessage());
 	}
 }
 ?>
