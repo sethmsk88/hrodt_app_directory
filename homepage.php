@@ -14,7 +14,8 @@
 			"Class Specs" => "./class_specs",
 			"Pay Level Manager" => "./pay_level_manager",
 			"Hiring Appointment Process" => "./hiring_appointment_process",
-			"SACS" => "./sacs"
+			"SACS" => "./sacs",
+			"User Management" => "./user_management"
 		);
 
 		// Create a button for each pair in button_array
