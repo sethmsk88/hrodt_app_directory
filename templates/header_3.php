@@ -19,6 +19,6 @@
 
 <div class="header_bar">
 	<div class="container">
-		<img id="famuLogo" src="/bootstrap/images/famulogo2014.png" alt="" />
+		<img id="famuLogo" src="/bootstrap/images/famulogo2014.png" alt="" onclick="window.location.href='/bootstrap/apps/'" style="cursor:pointer"/>
 	</div>
 </div>
